@@ -36,11 +36,39 @@
                        (+ (remainder number 3)
                           (* (base10->base3 (quotient number 3)) 10))])))
 
+;;; Recursive conversion from base 3 to balanced base 3. The given number must
+;;; be positive (the negative version is just the opposite of all.
+(define base3->balanced3
+  (lambda (number) (cond
+                           [(zero? number) ""]
+                           [else
+                             ;; Everything is rapresented using + - and \..
+                             (let* ([num (remainder number 10)]
+                                    [sig (cond
+                                          [(eq? num 1) "+"]
+                                          [(zero? num) "."]
+                                          [else "-"])]
+                                    [crr (if (> (abs num) 1) 1 0)])
+                               ;; Creating the balanced number.
+                               (string-append
+                                 (base3->balanced3 (+ (quotient number 10) crr))
+                                 sig))])))
+
+;;; Just a simple wrapper to simplify the use of all the procedures
+(define base10->balanced3
+  (lambda (number) (base3->balanced3 (base10->base3 number))))
+
 ;;; Some tests
+(base10->balanced3 1)
+(base10->balanced3 2)
+(base10->balanced3 3)
+(base10->balanced3 4)
+(base10->balanced3 5)
+
 (balanced3->base10 "--+.-")
 (balanced3->base10 "+.-")
 (balanced3->base10 "+-")
 (balanced3->base10 "-+.-")
 
 (base10->base3 10)
-(base10->base3 12)
+(base10->base3 3)
