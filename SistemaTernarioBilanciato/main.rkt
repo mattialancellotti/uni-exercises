@@ -54,9 +54,21 @@
                            (base3->balanced3 (+ (quotient number 10) crr))
                            sig))])))
 
+(define make-negative
+  (lambda (balanced) (list->string
+                       (map (lambda (x)
+                              (cond
+                                [(char=? x #\-) #\+]
+                                [(char=? x #\+) #\-]
+                                [else x]))
+                            (string->list balanced)))))
+
 ;;; Just a simple wrapper to simplify the use of all the procedures
 (define base10->balanced3
-  (lambda (number) (base3->balanced3 (base10->base3 number))))
+  (lambda (number) (if (negative? number)
+                     (make-negative (base3->balanced3
+                                      (base10->base3 (abs number))))
+                     (base3->balanced3 (base10->base3 number)))))
 
 ;;; Some tests
 (base10->balanced3 1)
@@ -65,10 +77,7 @@
 (base10->balanced3 4)
 (base10->balanced3 5)
 
-(balanced3->base10 "--+.-")
+(base10->balanced3 (balanced3->base10 "--+.-"))
 (balanced3->base10 "+.-")
 (balanced3->base10 "+-")
 (balanced3->base10 "-+.-")
-
-(base10->base3 10)
-(base10->base3 3)
