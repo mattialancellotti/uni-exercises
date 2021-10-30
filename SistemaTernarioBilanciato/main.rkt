@@ -27,6 +27,20 @@
                               (balanced3->base10
                                 (substring number 1))))]))))
 
+;;; Recursive conversion from base 10 to base 3.
+;;; This is usefull for converting from base 10 to balanced base 3.
+(define base10->base3
+  (lambda (number) (cond
+                     [(zero? number) 0]
+                     [else
+                       (+ (remainder number 3)
+                          (* (base10->base3 (quotient number 3)) 10))])))
+
 ;;; Some tests
 (balanced3->base10 "--+.-")
 (balanced3->base10 "+.-")
+(balanced3->base10 "+-")
+(balanced3->base10 "-+.-")
+
+(base10->base3 10)
+(base10->base3 12)
