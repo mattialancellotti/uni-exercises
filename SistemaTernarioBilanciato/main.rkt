@@ -40,19 +40,19 @@
 ;;; be positive (the negative version is just the opposite of all.
 (define base3->balanced3
   (lambda (number) (cond
-                           [(zero? number) ""]
-                           [else
-                             ;; Everything is rapresented using + - and \..
-                             (let* ([num (remainder number 10)]
-                                    [sig (cond
-                                          [(eq? num 1) "+"]
-                                          [(zero? num) "."]
-                                          [else "-"])]
-                                    [crr (if (> (abs num) 1) 1 0)])
-                               ;; Creating the balanced number.
-                               (string-append
-                                 (base3->balanced3 (+ (quotient number 10) crr))
-                                 sig))])))
+                     [(zero? number) ""]
+                     [else
+                       ;; Everything is rapresented using + - and \..
+                       (let* ([num (remainder number 10)]
+                              [sig (cond
+                                    [(eq? num 1) "+"]
+                                    [(zero? num) "."]
+                                    [else "-"])]
+                              [crr (if (> (abs num) 1) 1 0)])
+                         ;; Creating the balanced number.
+                         (string-append
+                           (base3->balanced3 (+ (quotient number 10) crr))
+                           sig))])))
 
 ;;; Just a simple wrapper to simplify the use of all the procedures
 (define base10->balanced3
